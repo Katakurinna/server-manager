@@ -16,4 +16,5 @@ public class RustConfig {
     private String address;
     private Integer port;
     private String password;
+    private String wipeVersion;
 }
