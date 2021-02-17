@@ -18,8 +18,8 @@ public class ConsoleListener implements EventListener {
 
     @EventHandler
     public void logConsole(MessageReceiveEvent event) {
-        //service.save(event.getData());
-        //logger.info(event.getData().getMessage());
+        service.save(event.getData());
+        logger.info(event.getData().getMessage());
     }
 
 }
