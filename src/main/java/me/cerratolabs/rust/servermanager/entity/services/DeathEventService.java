@@ -49,7 +49,7 @@ public class DeathEventService {
     }
 
     public Podium getPodium() {
-        Query query = entityManager.createNativeQuery("SELECT killer_id, kills, @row_number::=@row_number-1 AS row_number FROM (SELECT killer_id, COUNT(killer_id) as kills FROM death_event_entity GROUP BY killer_id ORDER BY COUNT(killer_id) DESC LIMIT 5) AS d , (SELECT @row_number::=6) AS t");
+        Query query = entityManager.createNativeQuery("SELECT killer_id, kills, name, @row_number::=@row_number+1 AS row_number FROM ( SELECT killer_id, COUNT(killer_id) AS kills FROM death_event_entity GROUP BY killer_id ORDER BY COUNT(killer_id) DESC LIMIT 5) AS d,(SELECT @row_number::=0) AS t,(SELECT id, name FROM rust_entity) as e WHERE e.id = killer_id");
         List<Object[]> list = query.getResultList();
         List<PodiumPlayer> collect = list.stream().map(this::parseToPodiumPlayer).collect(Collectors.toList());
         return new Podium(collect);
@@ -57,12 +57,11 @@ public class DeathEventService {
 
     private PodiumPlayer parseToPodiumPlayer(Object[] obj) {
         PodiumPlayer player = new PodiumPlayer();
-        RustEntity killer = rustEntityService.findById(obj[0].toString());
-        player.setName(killer.getName());
-        player.setSteamID(killer.getId());
+        player.setName(obj[2].toString());
+        player.setSteamID(obj[0].toString());
         player.setKills(Integer.parseInt(obj[1].toString()));
+        player.setPodiumPosition((int) Double.parseDouble(obj[3].toString()));
         player.setDeaths(repository.countDeaths(player.getSteamID()));
-        player.setPodiumPosition((int) Double.parseDouble(obj[2].toString()));
         return player;
     }
 }

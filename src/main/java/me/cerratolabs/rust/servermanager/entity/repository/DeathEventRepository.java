@@ -7,10 +7,14 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public interface DeathEventRepository extends JpaRepository<DeathEventEntity, String> {
 
     DeathEventEntity findAllByKiller(RustEntity killer);
+
     @Query("SELECT COUNT(murdered) FROM DeathEventEntity where murdered.id = :murdered")
     Integer countDeaths(@Param("murdered") String murdered);
+
 }
