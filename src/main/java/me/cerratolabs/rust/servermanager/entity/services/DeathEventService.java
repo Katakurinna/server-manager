@@ -1,12 +1,11 @@
 package me.cerratolabs.rust.servermanager.entity.services;
 
-import me.cerratolabs.rusrcon.events.event.PlayerDeathByPlayerEvent;
 import me.cerratolabs.rust.servermanager.config.RustConfig;
 import me.cerratolabs.rust.servermanager.entity.entities.DeathEventEntity;
-import me.cerratolabs.rust.servermanager.entity.entities.RustEntity;
 import me.cerratolabs.rust.servermanager.entity.jentity.Podium;
 import me.cerratolabs.rust.servermanager.entity.jentity.podium.PodiumPlayer;
 import me.cerratolabs.rust.servermanager.entity.repository.DeathEventRepository;
+import me.cerratolabs.rustrcon.events.event.pvp.PlayerDeathByPlayerEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

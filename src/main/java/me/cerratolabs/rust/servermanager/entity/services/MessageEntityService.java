@@ -1,8 +1,8 @@
 package me.cerratolabs.rust.servermanager.entity.services;
 
-import me.cerratolabs.rusrcon.events.messages.RustGenericMessage;
 import me.cerratolabs.rust.servermanager.entity.entities.MessageEntity;
 import me.cerratolabs.rust.servermanager.entity.repository.MessageEntityRepository;
+import me.cerratolabs.rustrcon.events.messages.RustGenericMessage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

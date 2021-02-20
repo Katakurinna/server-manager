@@ -1,7 +1,7 @@
 package me.cerratolabs.rust.servermanager.rcon.listeners;
 
-import me.cerratolabs.rusrcon.events.messages.MessageReceiveEvent;
 import me.cerratolabs.rust.servermanager.entity.services.MessageEntityService;
+import me.cerratolabs.rustrcon.events.messages.MessageReceiveEvent;
 import me.nurio.events.handler.EventHandler;
 import me.nurio.events.handler.EventListener;
 import org.slf4j.Logger;
@@ -18,7 +18,7 @@ public class ConsoleListener implements EventListener {
 
     @EventHandler
     public void logConsole(MessageReceiveEvent event) {
-        //service.save(event.getData());
+        service.save(event.getData());
         logger.info(event.getData().getMessage());
     }
 

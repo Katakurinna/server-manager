@@ -1,8 +1,8 @@
 package me.cerratolabs.rust.servermanager.rcon.listeners;
 
-import me.cerratolabs.rusrcon.events.event.PlayerDeathByPlayerEvent;
 import me.cerratolabs.rust.servermanager.entity.services.DeathEventService;
 import me.cerratolabs.rust.servermanager.rcon.services.RustClientService;
+import me.cerratolabs.rustrcon.events.event.pvp.PlayerDeathByPlayerEvent;
 import me.nurio.events.handler.EventHandler;
 import me.nurio.events.handler.EventListener;
 import org.slf4j.Logger;
@@ -23,7 +23,7 @@ public class DeathEventListener implements EventListener {
 
     @EventHandler
     public void killEvent(PlayerDeathByPlayerEvent event) {
-        //deathEventService.saveDeathEvent(event);
+        deathEventService.saveDeathEvent(event);
         logger.info(String.format("Pvp: %s was killed by %s.", event.getPlayer(), event.getKiller()));
         rustClient.sendMessage("say " + String.format("PvP: %s -> %s", event.getKiller().getUsername(), event.getPlayer().getUsername()));
 

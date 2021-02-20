@@ -1,8 +1,8 @@
 package me.cerratolabs.rust.servermanager.entity.services;
 
-import me.cerratolabs.rusrcon.entities.Player;
 import me.cerratolabs.rust.servermanager.entity.entities.RustEntity;
 import me.cerratolabs.rust.servermanager.entity.repository.RustEntityRepository;
+import me.cerratolabs.rustrcon.entities.Player;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

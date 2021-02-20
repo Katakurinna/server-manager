@@ -1,7 +1,7 @@
 package me.cerratolabs.rust.servermanager.entity.entities;
 
 import lombok.Data;
-import me.cerratolabs.rusrcon.entities.enums.DeathReason;
+import me.cerratolabs.rustrcon.entities.enums.DeathReason;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
@@ -12,8 +12,8 @@ import javax.persistence.*;
 public class DeathEventEntity {
 
     @Id
-    @GeneratedValue(generator="system-uuid")
-    @GenericGenerator(name="system-uuid", strategy = "uuid")
+    @GeneratedValue(generator = "system-uuid")
+    @GenericGenerator(name = "system-uuid", strategy = "uuid")
     @Column(name = "id", updatable = false, nullable = false)
     private String id;
 

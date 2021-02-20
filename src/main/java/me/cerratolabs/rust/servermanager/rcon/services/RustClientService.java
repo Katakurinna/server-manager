@@ -4,11 +4,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.SneakyThrows;
-import me.cerratolabs.rusrcon.client.RustClient;
-import me.cerratolabs.rusrcon.events.messages.RustGenericMessage;
 import me.cerratolabs.rust.servermanager.config.RustConfig;
 import me.cerratolabs.rust.servermanager.rcon.listeners.ConsoleListener;
 import me.cerratolabs.rust.servermanager.rcon.listeners.DeathEventListener;
+import me.cerratolabs.rustrcon.client.RustClient;
+import me.cerratolabs.rustrcon.events.messages.RustGenericMessage;
 import me.nurio.events.handler.EventListener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,7 +28,8 @@ public class RustClientService {
 
     @Autowired
     private RustConfig config;
-    @Getter @Setter
+    @Getter
+    @Setter
     private RustClientBean rustClient;
     @Autowired
     private EventManagerService eventManager;
