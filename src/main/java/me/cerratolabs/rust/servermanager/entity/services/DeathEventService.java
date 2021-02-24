@@ -48,7 +48,7 @@ public class DeathEventService {
     }
 
     public Podium getPodium() {
-        Query query = entityManager.createNativeQuery("SELECT killer_id, kills, name, @row_number::=@row_number+1 AS row_number FROM ( SELECT killer_id, COUNT(killer_id) AS kills FROM death_event_entity GROUP BY killer_id ORDER BY COUNT(killer_id) DESC LIMIT 5) AS d,(SELECT @row_number::=0) AS t,(SELECT id, name FROM rust_entity) as e WHERE e.id = killer_id");
+        Query query = entityManager.createNativeQuery("SELECT killer_id, kills, name, @row_number::=@row_number+1 AS row_number FROM ( SELECT killer_id, COUNT(killer_id) AS kills FROM death_event_entity WHERE wipe_version LIKE '" + config.getWipeVersion() + "' GROUP BY killer_id ORDER BY COUNT(killer_id) DESC LIMIT 5) AS d,(SELECT @row_number::=0) AS t,(SELECT id, name FROM rust_entity) as e WHERE e.id = killer_id");
         List<Object[]> list = query.getResultList();
         List<PodiumPlayer> collect = list.stream().map(this::parseToPodiumPlayer).collect(Collectors.toList());
         return new Podium(collect);

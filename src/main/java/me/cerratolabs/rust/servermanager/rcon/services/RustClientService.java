@@ -7,6 +7,7 @@ import lombok.SneakyThrows;
 import me.cerratolabs.rust.servermanager.config.RustConfig;
 import me.cerratolabs.rust.servermanager.rcon.listeners.ConsoleListener;
 import me.cerratolabs.rust.servermanager.rcon.listeners.DeathEventListener;
+import me.cerratolabs.rust.servermanager.rcon.listeners.PlayerListener;
 import me.cerratolabs.rustrcon.client.RustClient;
 import me.cerratolabs.rustrcon.events.messages.RustGenericMessage;
 import me.nurio.events.handler.EventListener;
@@ -38,14 +39,15 @@ public class RustClientService {
     @Autowired
     private DeathEventListener deathEventListener;
     @Autowired
+    private PlayerListener playerListener;
+    @Autowired
     private ApplicationContext context;
 
     @PostConstruct
     public void openClient() {
-        rustClient = context.getBean(RustClientBean.class, eventManager);
         eventManager.registerEvents(consoleListener);
         eventManager.registerEvents(deathEventListener);
-        CompletableFuture.runAsync(this::start);
+        eventManager.registerEvents(playerListener);
         CompletableFuture.runAsync(this::verifyOpened);
     }
 
@@ -53,22 +55,22 @@ public class RustClientService {
         rustClient.startConnection(config.getAddress(), config.getPort(), config.getPassword());
     }
 
+    @SneakyThrows
     public void verifyOpened() {
         while (true) {
-            try {
-                if (isOpen()) {
-                    logger.info("Connected!");
-                }
-                while (isOpen()) {
-                    Thread.sleep(500);
-                }
-                while (!isOpen()) {
-                    logger.info("Connection lost, retrying!");
-                    Thread.sleep(500);
-                    rustClient = context.getBean(RustClientBean.class, eventManager);
-                    CompletableFuture.runAsync(this::start);
-                }
-            } catch (Exception e) {
+            if (!isOpen()) {
+                rustClient = context.getBean(RustClientBean.class, eventManager);
+                start();
+            }
+            if (isOpen()) {
+                logger.info("Connected!");
+            }
+            while (isOpen()) {
+                Thread.sleep(2000);
+            }
+            if (!isOpen()) {
+                logger.info("Connection lost, retrying!");
+                Thread.sleep(2000);
             }
         }
     }
@@ -78,7 +80,6 @@ public class RustClientService {
     }
 
     public RustClient getRustClient() {
-        openClient();
         return rustClient;
     }
 
@@ -110,5 +111,4 @@ public class RustClientService {
     public void sendMessage(RustGenericMessage message) {
         this.rustClient.sendMessage(message);
     }
-
 }

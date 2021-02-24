@@ -3,6 +3,7 @@ package me.cerratolabs.rust.servermanager.entity.services;
 import me.cerratolabs.rust.servermanager.entity.entities.RustEntity;
 import me.cerratolabs.rust.servermanager.entity.repository.RustEntityRepository;
 import me.cerratolabs.rustrcon.entities.Player;
+import me.cerratolabs.rustrcon.events.event.player.PlayerJoinEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -21,6 +22,17 @@ public class RustEntityService {
 
     @Transactional
     public RustEntity savePlayer(Player player) {
+        RustEntity byId = findById(player.getSteamID());
+        if (byId != null && byId.getId() != null) return byId;
+        RustEntity entity = new RustEntity();
+        entity.setId(player.getSteamID());
+        entity.setName(player.getUsername());
+        repository.saveAndFlush(entity);
+        return entity;
+    }
+
+    public RustEntity savePlayer(PlayerJoinEvent event) {
+        Player player = event.getPlayer();
         RustEntity byId = findById(player.getSteamID());
         if (byId != null && byId.getId() != null) return byId;
         RustEntity entity = new RustEntity();
