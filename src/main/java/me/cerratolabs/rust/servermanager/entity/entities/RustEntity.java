@@ -21,4 +21,7 @@ public class RustEntity {
 
     @Column
     private String name;
+
+    @Column
+    private String discord;
 }

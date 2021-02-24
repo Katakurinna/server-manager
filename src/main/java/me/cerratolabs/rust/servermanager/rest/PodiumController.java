@@ -26,6 +26,12 @@ public class PodiumController {
         return mapper.writeValueAsString(deathEventService.getPodium());
     }
 
+    @GetMapping("/stats")
+    @SneakyThrows
+    public String getPodium() {
+        return mapper.writeValueAsString(deathEventService.getPodium());
+    }
+
     @GetMapping("/chat")
     @SneakyThrows
     public String getChatFrom(@RequestParam String name) {

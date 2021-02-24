@@ -2,6 +2,7 @@ package me.cerratolabs.rust.servermanager.entity.services;
 
 import me.cerratolabs.rust.servermanager.config.RustConfig;
 import me.cerratolabs.rust.servermanager.entity.entities.DeathEventEntity;
+import me.cerratolabs.rust.servermanager.entity.jentity.PlayerStats;
 import me.cerratolabs.rust.servermanager.entity.jentity.Podium;
 import me.cerratolabs.rust.servermanager.entity.jentity.podium.PodiumPlayer;
 import me.cerratolabs.rust.servermanager.entity.repository.DeathEventRepository;
@@ -62,5 +63,13 @@ public class DeathEventService {
         player.setPodiumPosition((int) Double.parseDouble(obj[3].toString()));
         player.setDeaths(repository.countDeaths(player.getSteamID()));
         return player;
+    }
+
+    public PlayerStats getPlayerStats(String steamID) {
+
+    }
+
+    public PlayerStats getPlayerStats(String discordID) {
+
     }
 }

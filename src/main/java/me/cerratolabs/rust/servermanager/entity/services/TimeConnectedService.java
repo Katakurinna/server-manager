@@ -24,6 +24,6 @@ public class TimeConnectedService {
         timeConnected.setLeft(left);
         timeConnected.setConnectedMillis(left - join);
         timeConnected.setWipeVersion(config.getWipeVersion());
-
+        repository.save(timeConnected);
     }
 }

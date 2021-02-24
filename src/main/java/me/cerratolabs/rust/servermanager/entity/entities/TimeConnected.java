@@ -1,20 +1,21 @@
 package me.cerratolabs.rust.servermanager.entity.entities;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
-import org.hibernate.annotations.GenericGenerator;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
 @Table
 @Entity
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class TimeConnected {
 
     @Id
-    @GeneratedValue(generator = "system-uuid")
-    @GenericGenerator(name = "system-uuid", strategy = "uuid")
-    @Column(name = "id", updatable = false, nullable = false)
-    private String id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
 
     @ManyToOne
     private RustEntity player;
