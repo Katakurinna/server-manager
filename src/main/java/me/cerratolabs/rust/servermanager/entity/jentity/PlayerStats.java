@@ -12,12 +12,18 @@ public class PlayerStats {
 
     private RustEntity player;
 
-    private String img_url;
+    private String avatar;
 
-    private Integer kills;
+    private Integer wipeKills;
 
-    private Integer deaths;
+    private Integer wipeDeaths;
 
-    private Float KDR;
+    private Float wipeKDR;
+
+    private Integer totalKills;
+
+    private Integer totalDeaths;
+
+    private Float totalKDR;
 
 }

@@ -1,7 +1,11 @@
 package me.cerratolabs.rust.servermanager.entity.services;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
+import lombok.SneakyThrows;
 import me.cerratolabs.rust.servermanager.config.RustConfig;
 import me.cerratolabs.rust.servermanager.entity.entities.DeathEventEntity;
+import me.cerratolabs.rust.servermanager.entity.entities.RustEntity;
 import me.cerratolabs.rust.servermanager.entity.jentity.PlayerStats;
 import me.cerratolabs.rust.servermanager.entity.jentity.Podium;
 import me.cerratolabs.rust.servermanager.entity.jentity.podium.PodiumPlayer;
@@ -9,6 +13,7 @@ import me.cerratolabs.rust.servermanager.entity.repository.DeathEventRepository;
 import me.cerratolabs.rustrcon.events.event.pvp.PlayerDeathByPlayerEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
@@ -31,6 +36,8 @@ public class DeathEventService {
 
     @Autowired
     private EntityManager entityManager;
+
+    private ObjectMapper mapper = new ObjectMapper();
 
     public List<DeathEventEntity> findAllByMurdered(String murderedID) {
         return null;
@@ -55,6 +62,30 @@ public class DeathEventService {
         return new Podium(collect);
     }
 
+    public Integer getWipeKills(String steamID) {
+        Query query = entityManager.createNativeQuery("SELECT COUNT(killer_id) AS kills FROM death_event_entity WHERE wipe_version LIKE '" + config.getWipeVersion() + "' AND killer_id = " + steamID);
+        Object kills = query.getSingleResult();
+        return kills != null ? Integer.parseInt(kills.toString()) : 0;
+    }
+
+    public Integer getTotalKills(String steamID) {
+        Query query = entityManager.createNativeQuery("SELECT COUNT(killer_id) AS kills FROM death_event_entity WHERE killer_id = " + steamID);
+        Object kills = query.getSingleResult();
+        return kills != null ? Integer.parseInt(kills.toString()) : 0;
+    }
+
+    public Integer getWipeDeaths(String steamID) {
+        Query query = entityManager.createNativeQuery("SELECT COUNT(murdered_id) AS kills FROM death_event_entity WHERE wipe_version LIKE '" + config.getWipeVersion() + "' AND murdered_id = " + steamID);
+        Object kills = query.getSingleResult();
+        return kills != null ? Integer.parseInt(kills.toString()) : 0;
+    }
+
+    public Integer getTotalDeaths(String steamID) {
+        Query query = entityManager.createNativeQuery("SELECT COUNT(murdered_id) AS kills FROM death_event_entity WHERE murdered_id = " + steamID);
+        Object kills = query.getSingleResult();
+        return kills != null ? Integer.parseInt(kills.toString()) : 0;
+    }
+
     private PodiumPlayer parseToPodiumPlayer(Object[] obj) {
         PodiumPlayer player = new PodiumPlayer();
         player.setName(obj[2].toString());
@@ -65,11 +96,49 @@ public class DeathEventService {
         return player;
     }
 
-    public PlayerStats getPlayerStats(String steamID) {
-
+    public PlayerStats getPlayerStatsFromSteamID(String steamID) {
+        return getPlayerStats(rustEntityService.findById(steamID));
     }
 
-    public PlayerStats getPlayerStats(String discordID) {
-
+    public PlayerStats getPlayerStatsFromDiscordID(String discordID) {
+        return getPlayerStats(rustEntityService.findByDiscord(discordID));
     }
+
+    public PlayerStats getPlayerStatsAndSaveDiscordID(String steamID, String discordID) {
+        return getPlayerStats(rustEntityService.addDiscordToEntity(steamID, discordID));
+    }
+
+    private PlayerStats getPlayerStats(RustEntity player) {
+        PlayerStats stats = new PlayerStats();
+        stats.setPlayer(player);
+        stats.setWipeKills(getWipeKills(player.getId()));
+        stats.setWipeDeaths(getWipeDeaths(player.getId()));
+
+        stats.setWipeKDR(calculateKDR(stats.getWipeKills(), stats.getWipeDeaths()));
+
+        stats.setTotalKills(getTotalKills(player.getId()));
+        stats.setTotalDeaths(getTotalDeaths(player.getId()));
+        stats.setTotalKDR(calculateKDR(stats.getTotalKills(), stats.getTotalDeaths()));
+        stats.setAvatar(getAvatar(player.getId()));
+        return stats;
+    }
+
+    @SneakyThrows
+    private String getAvatar(String steamID) {
+        String url = "http://api.steampowered.com/ISteamUser/GetPlayerSummaries/v0002/?key=" + config.getSteamKey() + "&steamids=" + steamID;
+        RestTemplate restTemplate = new RestTemplate();
+        ObjectNode result = restTemplate.getForObject(url, ObjectNode.class);
+        return result
+            .get("response")
+            .get("players")
+            .get(0)
+            .get("avatarfull")
+            .asText();
+    }
+
+    private Float calculateKDR(Integer kills, Integer deaths) {
+        return (float) kills / (float) deaths;
+    }
+
+
 }

@@ -13,4 +13,6 @@ public interface RustEntityRepository extends JpaRepository<RustEntity, String> 
 
     List<RustEntity> findAllByName(String name);
 
+    RustEntity findRustEntityByDiscord(String discord);
+
 }

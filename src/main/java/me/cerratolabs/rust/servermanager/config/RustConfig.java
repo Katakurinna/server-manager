@@ -17,4 +17,5 @@ public class RustConfig {
     private Integer port;
     private String password;
     private String wipeVersion;
+    private String steamKey;
 }

@@ -19,7 +19,7 @@ public class TimeConnectedService {
 
     public void save(Player player, Long join, Long left) {
         TimeConnected timeConnected = new TimeConnected();
-        timeConnected.setPlayer(new RustEntity(player.getSteamID(), player.getUsername()));
+        timeConnected.setPlayer(new RustEntity(player.getSteamID(), player.getUsername(), ""));
         timeConnected.setJoin(join);
         timeConnected.setLeft(left);
         timeConnected.setConnectedMillis(left - join);
