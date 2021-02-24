@@ -54,6 +54,6 @@ public class RustEntityService {
     public RustEntity addDiscordToEntity(String steamID, String discord) {
         RustEntity player = repository.findById(steamID).orElse(new RustEntity(steamID, "", discord));
         player.setDiscord(discord);
-        return repository.save(player);
+        return repository.saveAndFlush(player);
     }
 }

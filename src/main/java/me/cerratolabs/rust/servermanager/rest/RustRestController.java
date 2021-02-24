@@ -2,14 +2,19 @@ package me.cerratolabs.rust.servermanager.rest;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.SneakyThrows;
+import me.cerratolabs.rust.servermanager.entity.jentity.PlayerStats;
+import me.cerratolabs.rust.servermanager.entity.jentity.Podium;
 import me.cerratolabs.rust.servermanager.entity.services.DeathEventService;
 import me.cerratolabs.rust.servermanager.entity.services.MessageEntityService;
+import me.cerratolabs.rust.servermanager.rest.exceptions.InvalidDataException;
 import org.apache.logging.log4j.util.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-@org.springframework.web.bind.annotation.RestController("/api/v1")
+@RestController
 public class RustRestController {
 
     private ObjectMapper mapper = new ObjectMapper();
@@ -21,29 +26,31 @@ public class RustRestController {
     private MessageEntityService messageEntityService;
 
     @GetMapping("/podium")
-    @SneakyThrows
-    public String getPodium() {
-        return mapper.writeValueAsString(deathEventService.getPodium());
+    public Podium getPodium() {
+        return deathEventService.getPodium();
     }
 
     @GetMapping("/stats")
-    @SneakyThrows
-    public String getStatsAndSaveDiscordID(@RequestParam(required = false) String steamid, @RequestParam(required = false) String discordid) {
-        if(!Strings.isEmpty(steamid) && !Strings.isEmpty(steamid)) {
-            return mapper.writeValueAsString(deathEventService.getPlayerStatsAndSaveDiscordID(steamid, discordid));
+    public PlayerStats getStatsAndSaveDiscordID(
+        @RequestParam(name = "steamId", required = false) String steamId,
+        @RequestParam(name = "discordId", required = false) String discordId
+    ) {
+        if (Strings.isEmpty(steamId) && Strings.isEmpty(discordId)) {
+            throw new InvalidDataException("Put steamid param or discordid param.");
         }
-        if(!Strings.isEmpty(steamid)) {
-            return mapper.writeValueAsString(deathEventService.getPlayerStatsFromSteamID(steamid));
+        if (Strings.isEmpty(steamId)) {
+            return deathEventService.getPlayerStatsFromDiscordID(discordId);
         }
-        if(!Strings.isEmpty(discordid)) {
-            return mapper.writeValueAsString(deathEventService.getPlayerStatsFromDiscordID(discordid));
+        if (Strings.isEmpty(discordId)) {
+            return deathEventService.getPlayerStatsFromSteamID(steamId);
         }
-        return "Put steamID param or discordID param.";
+
+        return deathEventService.getPlayerStatsAndSaveDiscordID(steamId, discordId);
+
     }
 
     @GetMapping("/chat")
-    @SneakyThrows
     public String getChatFrom(@RequestParam String name) {
-        return "Not implemented yet";//mapper.writeValueAsString(messageEntityService.getChat(name));
+        return "Not implemented yet";//messageEntityService.getChat(name);
     }
 }
