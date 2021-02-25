@@ -101,7 +101,11 @@ public class DeathEventService {
     }
 
     public PlayerStats getPlayerStatsFromDiscordID(String discordID) {
-        return getPlayerStats(rustEntityService.findByDiscord(discordID));
+        RustEntity player = rustEntityService.findByDiscord(discordID);
+        if (player == null || player.getId() == null) {
+            throw new NullPointerException("Discord player doesn't exist");
+        }
+        return getPlayerStats(player);
     }
 
     public PlayerStats getPlayerStatsAndSaveDiscordID(String steamID, String discordID) {
