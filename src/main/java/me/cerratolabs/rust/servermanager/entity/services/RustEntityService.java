@@ -39,6 +39,7 @@ public class RustEntityService {
             }
             byId.setName(byId.getName());
             repository.save(byId);
+            return byId;
         }
         RustEntity entity = new RustEntity();
         entity.setId(player.getSteamID());
@@ -52,7 +53,7 @@ public class RustEntityService {
     }
 
     public RustEntity addDiscordToEntity(String steamID, String discord) {
-        RustEntity player = repository.findById(steamID).orElse(new RustEntity(steamID, "", discord));
+        RustEntity player = repository.findById(steamID).get();
         player.setDiscord(discord);
         return repository.saveAndFlush(player);
     }

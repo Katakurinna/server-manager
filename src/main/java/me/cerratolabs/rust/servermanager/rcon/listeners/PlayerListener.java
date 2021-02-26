@@ -26,13 +26,13 @@ public class PlayerListener implements EventListener {
 
     @EventHandler
     public void onPlayerLogin(PlayerJoinEvent event) {
-        //service.savePlayer(event);
+        service.savePlayer(event);
         timeconnected.put(event.getPlayer(), System.currentTimeMillis());
     }
 
     @EventHandler
     public void onPlayerDisconnect(PlayerDisconnectEvent event) {
         Long joinTime = timeconnected.containsKey(event.getPlayer()) ? timeconnected.get(event.getPlayer()) : System.currentTimeMillis();
-        //connectedService.save(event.getPlayer(), joinTime, System.currentTimeMillis());
+        connectedService.save(event.getPlayer(), joinTime, System.currentTimeMillis());
     }
 }
