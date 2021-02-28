@@ -79,10 +79,6 @@ public class RustClientService {
         return rustClient != null && rustClient.isOpen();
     }
 
-    public RustClient getRustClient() {
-        return rustClient;
-    }
-
     public void registerListener(EventListener listener) {
         eventManager.registerEvents(listener);
     }

@@ -24,8 +24,8 @@ public class DeathEventListener implements EventListener {
     @EventHandler
     public void killEvent(PlayerDeathByPlayerEvent event) {
         deathEventService.saveDeathEvent(event);
-        logger.info(String.format("Pvp: %s was killed by %s.", event.getPlayer(), event.getKiller()));
-        //rustClient.sendMessage("say " + String.format("PvP: %s -> %s", event.getKiller().getUsername(), event.getPlayer().getUsername()));
-
+        String message = String.format("PvP: %s -> %s", event.getKiller().getUsername(), event.getPlayer().getUsername());
+        logger.info(message);
+        //rustClient.sendMessage("say " + message);
     }
 }

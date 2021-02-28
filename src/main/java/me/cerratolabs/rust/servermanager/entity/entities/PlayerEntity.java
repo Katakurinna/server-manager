@@ -13,7 +13,6 @@ import javax.persistence.*;
 @NoArgsConstructor
 public class PlayerEntity {
 
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;

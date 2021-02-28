@@ -13,11 +13,13 @@ import javax.transaction.Transactional;
 public class RustEntityService {
     @Autowired
     private RustEntityRepository repository;
-    @Autowired
-    private DeathEventService deathEventService;
 
-    public PlayerEntity findById(String id) {
-        return repository.findById(id).orElse(null);
+    public PlayerEntity findBySteamId(Long id) {
+        return repository.findBySteamId(id);
+    }
+
+    public PlayerEntity findBySteamId(String id) {
+        return repository.findBySteamId(Long.parseLong(id));
     }
 
     @Transactional
@@ -31,7 +33,7 @@ public class RustEntityService {
     }
 
     private PlayerEntity saveRustEntity(Player player) {
-        PlayerEntity byId = findById(player.getSteamID());
+        PlayerEntity byId = findBySteamId(player.getSteamID());
 
         if (byId != null && byId.getId() != null) {
             if (player.getUsername().equals(byId.getName())) {
@@ -42,8 +44,10 @@ public class RustEntityService {
             return byId;
         }
         PlayerEntity entity = new PlayerEntity();
-        entity.setId(player.getSteamID());
+        entity.setSteamId(Long.parseLong(player.getSteamID()));
         entity.setName(player.getUsername());
+        entity.setCreationDate(System.currentTimeMillis());
+        entity.setLastJoinDate(System.currentTimeMillis());
         repository.saveAndFlush(entity);
         return entity;
     }
@@ -52,8 +56,8 @@ public class RustEntityService {
         return repository.findRustEntityByDiscord(discord);
     }
 
-    public PlayerEntity addDiscordToEntity(String steamID, String discord) {
-        PlayerEntity player = repository.findById(steamID).get();
+    public PlayerEntity addDiscordToEntity(Long steamID, String discord) {
+        PlayerEntity player = findBySteamId(steamID);
         player.setDiscord(discord);
         return repository.saveAndFlush(player);
     }

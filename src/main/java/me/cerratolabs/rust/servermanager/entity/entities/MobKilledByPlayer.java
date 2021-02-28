@@ -18,4 +18,5 @@ public class MobKilledByPlayer {
 
     @Column
     private String mob;
+
 }

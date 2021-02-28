@@ -9,6 +9,8 @@ import java.util.List;
 @Repository
 public interface RustEntityRepository extends JpaRepository<PlayerEntity, String> {
 
+    PlayerEntity findBySteamId(Long steamId);
+
     PlayerEntity findFirstByName(String name);
 
     List<PlayerEntity> findAllByName(String name);
