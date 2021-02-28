@@ -5,7 +5,7 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import lombok.SneakyThrows;
 import me.cerratolabs.rust.servermanager.config.RustConfig;
 import me.cerratolabs.rust.servermanager.entity.entities.DeathEventEntity;
-import me.cerratolabs.rust.servermanager.entity.entities.RustEntity;
+import me.cerratolabs.rust.servermanager.entity.entities.PlayerEntity;
 import me.cerratolabs.rust.servermanager.entity.jentity.PlayerStats;
 import me.cerratolabs.rust.servermanager.entity.jentity.Podium;
 import me.cerratolabs.rust.servermanager.entity.jentity.podium.PodiumPlayer;
@@ -101,7 +101,7 @@ public class DeathEventService {
     }
 
     public PlayerStats getPlayerStatsFromDiscordID(String discordID) {
-        RustEntity player = rustEntityService.findByDiscord(discordID);
+        PlayerEntity player = rustEntityService.findByDiscord(discordID);
         if (player == null || player.getId() == null) {
             throw new NullPointerException("Discord player doesn't exist");
         }
@@ -112,7 +112,7 @@ public class DeathEventService {
         return getPlayerStats(rustEntityService.addDiscordToEntity(steamID, discordID));
     }
 
-    private PlayerStats getPlayerStats(RustEntity player) {
+    private PlayerStats getPlayerStats(PlayerEntity player) {
         PlayerStats stats = new PlayerStats();
         stats.setPlayer(player);
         stats.setWipeKills(getWipeKills(player.getId()));

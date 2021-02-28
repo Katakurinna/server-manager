@@ -7,22 +7,15 @@ import javax.persistence.*;
 @Entity
 @Table
 @Data
-public class MessageEntity {
+public class MobKilledByPlayer {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Integer id;
+
+    @ManyToOne
+    private PlayerEntity player;
 
     @Column
-    private String message;
-
-    @Column
-    private Integer identifier;
-
-    @Column
-    private String stacktrace;
-
-    @Column
-    private String type;
-
+    private String mob;
 }

@@ -1,28 +1,22 @@
 package me.cerratolabs.rust.servermanager.entity.entities;
 
 import lombok.Data;
+import me.cerratolabs.rustrcon.entities.enums.DeathReason;
 
 import javax.persistence.*;
 
 @Entity
 @Table
 @Data
-public class MessageEntity {
+public class PlayerKilledByMob {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Integer id;
+
+    @ManyToOne
+    private PlayerEntity player;
 
     @Column
-    private String message;
-
-    @Column
-    private Integer identifier;
-
-    @Column
-    private String stacktrace;
-
-    @Column
-    private String type;
-
+    private DeathReason reason;
 }

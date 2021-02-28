@@ -2,7 +2,6 @@ package me.cerratolabs.rust.servermanager.entity.entities;
 
 import lombok.Data;
 import me.cerratolabs.rustrcon.entities.enums.DeathReason;
-import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 
@@ -12,16 +11,14 @@ import javax.persistence.*;
 public class DeathEventEntity {
 
     @Id
-    @GeneratedValue(generator = "system-uuid")
-    @GenericGenerator(name = "system-uuid", strategy = "uuid")
-    @Column(name = "id", updatable = false, nullable = false)
-    private String id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
     @ManyToOne
-    private RustEntity killer;
+    private PlayerEntity killer;
 
     @ManyToOne
-    private RustEntity murdered;
+    private PlayerEntity murdered;
 
     @Column
     private Long timestamp;
@@ -31,4 +28,8 @@ public class DeathEventEntity {
 
     @Column
     private String wipeVersion;
+
+    @Column
+    private Integer server;
+
 }

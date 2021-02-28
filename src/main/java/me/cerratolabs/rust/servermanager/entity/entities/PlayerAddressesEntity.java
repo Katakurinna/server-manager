@@ -4,25 +4,22 @@ import lombok.Data;
 
 import javax.persistence.*;
 
-@Entity
 @Table
+@Entity
 @Data
-public class MessageEntity {
+public class PlayerAddressesEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column
-    private String message;
+    @ManyToOne
+    private PlayerEntity player;
 
     @Column
-    private Integer identifier;
+    private String address;
 
     @Column
-    private String stacktrace;
-
-    @Column
-    private String type;
+    private Long lastTimeUsed;
 
 }

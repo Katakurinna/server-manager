@@ -1,6 +1,6 @@
 package me.cerratolabs.rust.servermanager.entity.services;
 
-import me.cerratolabs.rust.servermanager.entity.entities.RustEntity;
+import me.cerratolabs.rust.servermanager.entity.entities.PlayerEntity;
 import me.cerratolabs.rust.servermanager.entity.repository.RustEntityRepository;
 import me.cerratolabs.rustrcon.entities.Player;
 import me.cerratolabs.rustrcon.events.event.player.PlayerJoinEvent;
@@ -16,22 +16,22 @@ public class RustEntityService {
     @Autowired
     private DeathEventService deathEventService;
 
-    public RustEntity findById(String id) {
+    public PlayerEntity findById(String id) {
         return repository.findById(id).orElse(null);
     }
 
     @Transactional
-    public RustEntity savePlayer(Player player) {
+    public PlayerEntity savePlayer(Player player) {
         return saveRustEntity(player);
     }
 
-    public RustEntity savePlayer(PlayerJoinEvent event) {
+    public PlayerEntity savePlayer(PlayerJoinEvent event) {
         Player player = event.getPlayer();
         return saveRustEntity(player);
     }
 
-    private RustEntity saveRustEntity(Player player) {
-        RustEntity byId = findById(player.getSteamID());
+    private PlayerEntity saveRustEntity(Player player) {
+        PlayerEntity byId = findById(player.getSteamID());
 
         if (byId != null && byId.getId() != null) {
             if (player.getUsername().equals(byId.getName())) {
@@ -41,19 +41,19 @@ public class RustEntityService {
             repository.save(byId);
             return byId;
         }
-        RustEntity entity = new RustEntity();
+        PlayerEntity entity = new PlayerEntity();
         entity.setId(player.getSteamID());
         entity.setName(player.getUsername());
         repository.saveAndFlush(entity);
         return entity;
     }
 
-    public RustEntity findByDiscord(String discord) {
+    public PlayerEntity findByDiscord(String discord) {
         return repository.findRustEntityByDiscord(discord);
     }
 
-    public RustEntity addDiscordToEntity(String steamID, String discord) {
-        RustEntity player = repository.findById(steamID).get();
+    public PlayerEntity addDiscordToEntity(String steamID, String discord) {
+        PlayerEntity player = repository.findById(steamID).get();
         player.setDiscord(discord);
         return repository.saveAndFlush(player);
     }

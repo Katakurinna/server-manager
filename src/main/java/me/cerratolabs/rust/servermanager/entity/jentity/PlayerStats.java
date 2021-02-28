@@ -3,14 +3,14 @@ package me.cerratolabs.rust.servermanager.entity.jentity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import me.cerratolabs.rust.servermanager.entity.entities.RustEntity;
+import me.cerratolabs.rust.servermanager.entity.entities.PlayerEntity;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class PlayerStats {
 
-    private RustEntity player;
+    private PlayerEntity player;
 
     private String avatar;
 

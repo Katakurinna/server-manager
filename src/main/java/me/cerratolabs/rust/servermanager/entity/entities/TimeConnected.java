@@ -18,7 +18,7 @@ public class TimeConnected {
     private Integer id;
 
     @ManyToOne
-    private RustEntity player;
+    private PlayerEntity player;
 
     @Column
     private Long join;

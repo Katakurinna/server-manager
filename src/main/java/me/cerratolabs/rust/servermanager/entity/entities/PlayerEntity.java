@@ -4,24 +4,32 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Table
 @Entity
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class RustEntity {
+public class PlayerEntity {
+
 
     @Id
-    private String id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
+
+    @Column
+    private Long steamId;
 
     @Column
     private String name;
 
     @Column
     private String discord;
+
+    @Column
+    private Long creationDate;
+
+    @Column
+    private Long lastJoinDate;
 }
