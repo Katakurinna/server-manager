@@ -36,4 +36,7 @@ public class ServerEntity {
     @Column
     private String image;
 
+    @Column
+    private String passwordSalt;
+
 }

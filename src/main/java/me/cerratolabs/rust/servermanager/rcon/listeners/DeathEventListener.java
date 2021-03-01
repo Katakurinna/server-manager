@@ -1,7 +1,6 @@
 package me.cerratolabs.rust.servermanager.rcon.listeners;
 
 import me.cerratolabs.rust.servermanager.entity.services.DeathEventService;
-import me.cerratolabs.rust.servermanager.rcon.services.RustClientService;
 import me.cerratolabs.rustrcon.events.event.pvp.PlayerDeathByPlayerEvent;
 import me.nurio.events.handler.EventHandler;
 import me.nurio.events.handler.EventListener;

@@ -1,6 +1,7 @@
 package me.cerratolabs.rust.servermanager.rest;
 
 import com.sun.istack.NotNull;
+import lombok.SneakyThrows;
 import me.cerratolabs.rust.servermanager.entity.services.ServerEntityService;
 import me.cerratolabs.rust.servermanager.rest.exceptions.InvalidDataException;
 import me.cerratolabs.rust.servermanager.rest.exceptions.ServerAlreadyExistException;
@@ -19,7 +20,8 @@ public class RustServerController {
     @Autowired
     private ServerEntityService serverEntityService;
 
-    @PostMapping("/server/list")
+    @SneakyThrows
+    @PostMapping("/server/new")
     public void newServer(@NotNull @RequestBody Server server) {
         if (server == null) throw new InvalidDataException("You need a json body to be able to work");
         if (server.containsNulls())

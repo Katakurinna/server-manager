@@ -28,7 +28,7 @@ public class DeathEventService {
     private DeathEventRepository repository;
 
     @Autowired
-    private RustEntityService rustEntityService;
+    private PlayerEntityService playerEntityService;
 
     @Autowired
     private RustConfig config;
@@ -45,8 +45,8 @@ public class DeathEventService {
     @Transactional
     public void saveDeathEvent(PlayerDeathByPlayerEvent event) {
         DeathEventEntity deathEventEntity = new DeathEventEntity();
-        deathEventEntity.setKiller(rustEntityService.savePlayer(event.getKiller()));
-        deathEventEntity.setMurdered(rustEntityService.savePlayer(event.getPlayer()));
+        deathEventEntity.setKiller(playerEntityService.savePlayer(event.getKiller()));
+        deathEventEntity.setMurdered(playerEntityService.savePlayer(event.getPlayer()));
         deathEventEntity.setTimestamp(event.getTime());
         deathEventEntity.setReason(event.getReason());
         deathEventEntity.setWipeVersion(config.getWipeVersion());
@@ -95,11 +95,11 @@ public class DeathEventService {
     }
 
     public PlayerStats getPlayerStatsFromSteamID(Long steamID) {
-        return getPlayerStats(rustEntityService.findBySteamId(steamID));
+        return getPlayerStats(playerEntityService.findBySteamId(steamID));
     }
 
     public PlayerStats getPlayerStatsFromDiscordID(String discordID) {
-        PlayerEntity player = rustEntityService.findByDiscord(discordID);
+        PlayerEntity player = playerEntityService.findByDiscord(discordID);
         if (player == null || player.getId() == null) {
             throw new NullPointerException("Discord player doesn't exist");
         }
@@ -107,7 +107,7 @@ public class DeathEventService {
     }
 
     public PlayerStats getPlayerStatsAndSaveDiscordID(Long steamID, String discordID) {
-        return getPlayerStats(rustEntityService.addDiscordToEntity(steamID, discordID));
+        return getPlayerStats(playerEntityService.addDiscordToEntity(steamID, discordID));
     }
 
     private PlayerStats getPlayerStats(PlayerEntity player) {

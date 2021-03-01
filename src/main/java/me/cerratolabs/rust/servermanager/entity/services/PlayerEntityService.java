@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 
 @Service
-public class RustEntityService {
+public class PlayerEntityService {
     @Autowired
     private RustEntityRepository repository;
 
