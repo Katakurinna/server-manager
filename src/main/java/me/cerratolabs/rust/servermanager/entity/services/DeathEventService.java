@@ -7,6 +7,7 @@ import me.cerratolabs.rust.servermanager.entity.entities.DeathEventEntity;
 import me.cerratolabs.rust.servermanager.entity.entities.PlayerEntity;
 import me.cerratolabs.rust.servermanager.entity.entities.PlayerSeason;
 import me.cerratolabs.rust.servermanager.entity.entities.ServerEntity;
+import me.cerratolabs.rust.servermanager.entity.jentity.Kill;
 import me.cerratolabs.rust.servermanager.entity.jentity.PlayerStats;
 import me.cerratolabs.rust.servermanager.entity.jentity.Podium;
 import me.cerratolabs.rust.servermanager.entity.jentity.podium.PodiumPlayer;
@@ -19,6 +20,9 @@ import org.springframework.web.client.RestTemplate;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 import javax.transaction.Transactional;
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -42,6 +46,9 @@ public class DeathEventService {
 
     @Autowired
     private PlayerSeasonService playerSeasonService;
+
+    @Autowired
+    private ServerEntityService serverService;
 
     @Transactional
     public void saveDeathEvent(PlayerDeathByPlayerEvent event, ServerEntity server) {
@@ -133,7 +140,20 @@ public class DeathEventService {
     }
 
 
-    public Integer countDeaths(Long steamID) {
-        return repository.countDeaths(steamID);
+    public Integer countDeaths(Integer playerSeason) {
+        return repository.countDeaths(playerSeason);
+    }
+
+    public List<Kill> getKillsFromServer(ServerEntity server) {
+        List<DeathEventEntity> deathEventEntityList = repository.findAllByServerAndWipeOrderByTimestampDesc(server, wipe.findWipeByServer(server));
+        return deathEventEntityList.stream().map(this::parseDeathEventToKill).collect(Collectors.toList());
+    }
+
+    public List<Kill> getKillsFromServer(Integer serverId) {
+        return getKillsFromServer(serverService.findActiveServerByIdWithSecuredPassword(serverId));
+    }
+
+    private Kill parseDeathEventToKill(DeathEventEntity event) {
+        return new Kill(event.getKiller().getPlayer(), event.getMurdered().getPlayer(), event.getTimestamp(), event.getId());
     }
 }

@@ -1,6 +1,7 @@
 package me.cerratolabs.rust.servermanager.rest;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import me.cerratolabs.rust.servermanager.entity.jentity.Kill;
 import me.cerratolabs.rust.servermanager.entity.jentity.PlayerStats;
 import me.cerratolabs.rust.servermanager.entity.jentity.Podium;
 import me.cerratolabs.rust.servermanager.entity.services.DeathEventService;
@@ -13,6 +14,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 @RestController
 public class RustRestController {
@@ -59,5 +62,10 @@ public class RustRestController {
     @GetMapping("/chat")
     public String getChatFrom(@RequestParam String name) {
         return "Not implemented yet";//messageEntityService.getChat(name);
+    }
+
+    @GetMapping("/kills")
+    public List<Kill> getKillsFromServer(@RequestParam(name = "serverId", required = true) Integer serverId) {
+        return deathEventService.getKillsFromServer(serverId);
     }
 }
