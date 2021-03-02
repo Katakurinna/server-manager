@@ -13,6 +13,6 @@ public interface DeathEventRepository extends JpaRepository<DeathEventEntity, St
     DeathEventEntity findAllByKiller(PlayerEntity killer);
 
     @Query("SELECT COUNT(murdered) FROM DeathEventEntity where murdered.id = :murdered")
-    Integer countDeaths(@Param("murdered") String murdered);
+    Integer countDeaths(@Param("murdered") Long murdered);
 
 }

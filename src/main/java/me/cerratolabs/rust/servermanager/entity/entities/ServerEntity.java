@@ -15,9 +15,6 @@ public class ServerEntity {
     private Integer id;
 
     @Column
-    private Integer serverId;
-
-    @Column
     private String address;
 
     @Column

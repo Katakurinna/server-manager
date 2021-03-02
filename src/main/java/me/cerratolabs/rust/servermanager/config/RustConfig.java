@@ -13,9 +13,11 @@ import org.springframework.context.annotation.Configuration;
 @NoArgsConstructor
 @AllArgsConstructor
 public class RustConfig {
-    private String address;
-    private Integer port;
-    private String password;
-    private String wipeVersion;
+    private String secretKey;
     private String steamKey;
+    private Integer serverId;
+    private Boolean sendKills = true;
+    private Boolean sendMobEvents = true;
+    private Boolean saveData = true;
+
 }
