@@ -27,7 +27,7 @@ public class PlayerSeasonService {
         return repository.save(playerSeason);
     }
 
-    public PlayerSeason tfindMostRecentlyPlayerSeason(PlayerEntity entity) {
+    public PlayerSeason findMostRecentlyPlayerSeason(PlayerEntity entity) {
         PlayerSeason season = null;
         try {
             Query query = em.createQuery("SELECT ps FROM PlayerSeason as ps WHERE ps.player=" + entity.getId() + " ORDER BY ps.startDate DESC");

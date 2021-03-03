@@ -30,7 +30,7 @@ public class DeathEventService {
         PlayerEntity killerEntity = playerEntityService.savePlayer(event.getKiller());
         PlayerSeason killerSeason = playerSeasonService.findMostRecentlyPlayerSeason(killerEntity);
         deathEventEntity.setKiller(killerSeason);
-        PlayerEntity murderedEntity = playerEntityService.savePlayer(event.getKiller());
+        PlayerEntity murderedEntity = playerEntityService.savePlayer(event.getPlayer());
         PlayerSeason murderedSeason = playerSeasonService.findMostRecentlyPlayerSeason(murderedEntity);
         deathEventEntity.setMurdered(murderedSeason);
         deathEventEntity.setTimestamp(event.getTime());
