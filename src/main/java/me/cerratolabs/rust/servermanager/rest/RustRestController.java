@@ -4,11 +4,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import me.cerratolabs.rust.servermanager.entity.jentity.Kill;
 import me.cerratolabs.rust.servermanager.entity.jentity.PlayerStats;
 import me.cerratolabs.rust.servermanager.entity.jentity.Podium;
-import me.cerratolabs.rust.servermanager.entity.services.DeathEventService;
-import me.cerratolabs.rust.servermanager.entity.services.MessageEntityService;
-import me.cerratolabs.rust.servermanager.entity.services.PodiumService;
 import me.cerratolabs.rust.servermanager.entity.services.ServerEntityService;
 import me.cerratolabs.rust.servermanager.rest.exceptions.InvalidDataException;
+import me.cerratolabs.rust.servermanager.rest.services.PlayerKillService;
+import me.cerratolabs.rust.servermanager.rest.services.PlayerStatsService;
+import me.cerratolabs.rust.servermanager.rest.services.PodiumService;
 import org.apache.logging.log4j.util.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,16 +23,16 @@ public class RustRestController {
     private ObjectMapper mapper = new ObjectMapper();
 
     @Autowired
-    private DeathEventService deathEventService;
-
-    @Autowired
     private PodiumService podiumService;
 
     @Autowired
-    private MessageEntityService messageEntityService;
+    private ServerEntityService serverService;
 
     @Autowired
-    private ServerEntityService serverService;
+    private PlayerKillService playerKillService;
+
+    @Autowired
+    private PlayerStatsService playerStatsService;
 
     @GetMapping("/podium")
     public Podium getPodium(@RequestParam(name = "serverId", required = true) Integer serverId) {
@@ -49,13 +49,13 @@ public class RustRestController {
             throw new InvalidDataException("Put steamid param or discordid param.");
         }
         if (Strings.isEmpty(steamId)) {
-            return deathEventService.getPlayerStatsFromDiscordID(discordId, serverService.findActiveServerByIdWithSecuredPassword(serverId));
+            return playerStatsService.getPlayerStatsFromDiscordID(discordId, serverService.findActiveServerByIdWithSecuredPassword(serverId));
         }
         if (Strings.isEmpty(discordId)) {
-            return deathEventService.getPlayerStatsFromSteamID(Long.parseLong(steamId), serverService.findActiveServerByIdWithSecuredPassword(serverId));
+            return playerStatsService.getPlayerStatsFromSteamID(Long.parseLong(steamId), serverService.findActiveServerByIdWithSecuredPassword(serverId));
         }
 
-        return deathEventService.getPlayerStatsAndSaveDiscordID(Long.parseLong(steamId), discordId, serverService.findActiveServerByIdWithSecuredPassword(serverId));
+        return playerStatsService.getPlayerStatsAndSaveDiscordID(Long.parseLong(steamId), discordId, serverService.findActiveServerByIdWithSecuredPassword(serverId));
 
     }
 
@@ -66,6 +66,6 @@ public class RustRestController {
 
     @GetMapping("/kills")
     public List<Kill> getKillsFromServer(@RequestParam(name = "serverId", required = true) Integer serverId) {
-        return deathEventService.getKillsFromServer(serverId);
+        return playerKillService.getKillsFromServer(serverId);
     }
 }

@@ -1,9 +1,6 @@
 package me.cerratolabs.rust.servermanager.entity.repository;
 
-import me.cerratolabs.rust.servermanager.entity.entities.DeathEventEntity;
-import me.cerratolabs.rust.servermanager.entity.entities.PlayerEntity;
-import me.cerratolabs.rust.servermanager.entity.entities.ServerEntity;
-import me.cerratolabs.rust.servermanager.entity.entities.WipeEntity;
+import me.cerratolabs.rust.servermanager.entity.entities.*;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -20,5 +17,13 @@ public interface DeathEventRepository extends JpaRepository<DeathEventEntity, St
     Integer countDeaths(@Param("murdered") Integer murdered);
 
     List<DeathEventEntity> findAllByServerAndWipeOrderByTimestampDesc(ServerEntity server, WipeEntity wipe);
+
+    Integer countAllByKillerAndWipeAndServer(PlayerSeason killer, WipeEntity wipe, ServerEntity server);
+
+    Integer countAllByKillerAndServer(PlayerSeason killer, ServerEntity server);
+
+    Integer countAllByMurderedAndWipeAndServer(PlayerSeason killer, WipeEntity wipe, ServerEntity server);
+
+    Integer countAllByMurderedAndServer(PlayerSeason murdered, ServerEntity server);
 
 }

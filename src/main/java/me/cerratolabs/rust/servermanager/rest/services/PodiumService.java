@@ -1,4 +1,4 @@
-package me.cerratolabs.rust.servermanager.entity.services;
+package me.cerratolabs.rust.servermanager.rest.services;
 
 import me.cerratolabs.rust.servermanager.config.RustConfig;
 import me.cerratolabs.rust.servermanager.entity.entities.PlayerEntity;
@@ -6,6 +6,10 @@ import me.cerratolabs.rust.servermanager.entity.entities.PlayerSeason;
 import me.cerratolabs.rust.servermanager.entity.entities.ServerEntity;
 import me.cerratolabs.rust.servermanager.entity.jentity.Podium;
 import me.cerratolabs.rust.servermanager.entity.jentity.podium.PodiumPlayer;
+import me.cerratolabs.rust.servermanager.entity.services.DeathEventService;
+import me.cerratolabs.rust.servermanager.entity.services.PlayerSeasonService;
+import me.cerratolabs.rust.servermanager.entity.services.ServerEntityService;
+import me.cerratolabs.rust.servermanager.entity.services.WipeEntityService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,16 +22,10 @@ import java.util.stream.Collectors;
 public class PodiumService {
 
     @Autowired
-    private RustConfig config;
-
-    @Autowired
     private EntityManager em;
 
     @Autowired
     private WipeEntityService wipeService;
-
-    @Autowired
-    private ServerEntityService serverService;
 
     @Autowired
     private PlayerSeasonService playerSeasonService;
