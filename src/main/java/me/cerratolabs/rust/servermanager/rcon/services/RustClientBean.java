@@ -13,10 +13,12 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Lazy;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
-@Component
 @Lazy
+@Component
+@Scope("prototype")
 public class RustClientBean extends RustClient {
 
     private final Logger logger = LoggerFactory.getLogger(RustClientBean.class);

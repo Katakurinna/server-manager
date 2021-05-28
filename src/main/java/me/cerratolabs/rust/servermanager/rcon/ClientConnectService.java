@@ -31,16 +31,15 @@ public class ClientConnectService {
     @Autowired
     private ApplicationContext context;
 
-    //private final Map<Integer, RustClientBean> serverList = new HashMap<>();
+    private final Map<Integer, RustClientBean> serverList = new HashMap<>();
 
     @PostConstruct
     private void openConnections() {
-        ServerEntity serverEntity = serverEntityService.findActiveServerByIdWithSecuredPassword(config.getServerId());
-        openConnection(serverEntity);
+        serverEntityService.findActiveServer().forEach(this::openConnection);
     }
 
-    public void addNewServer(ServerEntity serverEntity) {
-        // serverList.put(serverEntity.getId(), openConnection(serverEntity));
+    public void addNewServer(ServerEntity serverEntity) throws Exception {
+        serverList.put(serverEntity.getId(), openConnection(serverEntity));
     }
 
     @SneakyThrows
