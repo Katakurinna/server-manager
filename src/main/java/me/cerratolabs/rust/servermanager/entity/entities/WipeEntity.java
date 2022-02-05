@@ -6,33 +6,32 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
+@Data
 @Table
 @Entity
-@Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class TimeConnected {
+public class WipeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @ManyToOne
-    private PlayerEntity player;
+    @Column
+    private String name;
 
     @Column
-    private Long join;
+    private Long startDate;
 
     @Column
-    private Long left;
+    private Long endDate;
 
     @Column
-    private Long connectedMillis;
+    private Long seed;
 
-    @ManyToOne
-    private WipeEntity wipe;
+    @Column
+    private Integer mapSize;
 
     @ManyToOne
     private ServerEntity server;
-
 }

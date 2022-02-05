@@ -27,8 +27,6 @@ public class Server {
         if (address == null) return true;
         if (port == null) return true;
         if (password == null) return true;
-        if (name == null) return true;
-        if (image == null) return true;
-        return false;
+        return name == null;
     }
 }

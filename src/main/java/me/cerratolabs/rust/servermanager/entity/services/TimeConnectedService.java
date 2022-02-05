@@ -1,6 +1,6 @@
 package me.cerratolabs.rust.servermanager.entity.services;
 
-import me.cerratolabs.rust.servermanager.config.RustConfig;
+import me.cerratolabs.rust.servermanager.entity.entities.ServerEntity;
 import me.cerratolabs.rust.servermanager.entity.entities.TimeConnected;
 import me.cerratolabs.rust.servermanager.entity.repository.TimeConnectedRepository;
 import me.cerratolabs.rustrcon.entities.Player;
@@ -14,19 +14,20 @@ public class TimeConnectedService {
     private TimeConnectedRepository repository;
 
     @Autowired
-    private RustEntityService rustEntityService;
+    private PlayerEntityService playerEntityService;
 
     @Autowired
-    private RustConfig config;
+    private WipeEntityService wipeServer;
 
-    public void save(Player player, Long join, Long left) {
+    public void save(Player player, Long join, Long left, ServerEntity serverEntity) {
         long l = System.currentTimeMillis();
         TimeConnected timeConnected = new TimeConnected();
-        timeConnected.setPlayer(rustEntityService.savePlayer(player));
+        timeConnected.setPlayer(playerEntityService.savePlayer(player));
         timeConnected.setJoin(join);
         timeConnected.setLeft(left);
         timeConnected.setConnectedMillis(left - join);
-        timeConnected.setWipeVersion(config.getWipeVersion());
+        timeConnected.setWipe(wipeServer.findWipeByServer(serverEntity));
+        timeConnected.setServer(serverEntity);
         repository.save(timeConnected);
     }
 }

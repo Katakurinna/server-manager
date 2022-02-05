@@ -1,6 +1,7 @@
 package me.cerratolabs.rust.servermanager.entity.services;
 
 import me.cerratolabs.rust.servermanager.entity.entities.MessageEntity;
+import me.cerratolabs.rust.servermanager.entity.entities.ServerEntity;
 import me.cerratolabs.rust.servermanager.entity.jentity.ChatLog;
 import me.cerratolabs.rust.servermanager.entity.jentity.Message;
 import me.cerratolabs.rust.servermanager.entity.repository.MessageEntityRepository;
@@ -22,12 +23,17 @@ public class MessageEntityService {
     @Autowired
     private EntityManager entityManager;
 
-    public void save(RustGenericMessage m) {
+    @Autowired
+    private WipeEntityService wipeServer;
+
+    public void save(RustGenericMessage m, ServerEntity server) {
         MessageEntity e = new MessageEntity();
         e.setMessage(m.getMessage());
         e.setStacktrace(m.getStacktrace());
         e.setType(m.getType());
         e.setIdentifier(m.getIdentifier());
+        e.setServer(server);
+        e.setWipe(wipeServer.findWipeByServer(server));
         repository.save(e);
     }
 

@@ -1,6 +1,8 @@
 package me.cerratolabs.rust.servermanager.rcon;
 
+import lombok.SneakyThrows;
 import me.cerratolabs.rust.servermanager.config.RustConfig;
+import me.cerratolabs.rust.servermanager.encryption.SaltService;
 import me.cerratolabs.rust.servermanager.entity.entities.ServerEntity;
 import me.cerratolabs.rust.servermanager.entity.services.ServerEntityService;
 import me.cerratolabs.rust.servermanager.rcon.listeners.ConsoleListener;
@@ -15,6 +17,7 @@ import org.springframework.stereotype.Service;
 import javax.annotation.PostConstruct;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.CompletableFuture;
 
 @Service
 public class ClientConnectService {
@@ -28,20 +31,29 @@ public class ClientConnectService {
     @Autowired
     private ApplicationContext context;
 
-    private Map<Integer, RustClientBean> serverList = new HashMap<>();
+    private final Map<Integer, RustClientBean> serverList = new HashMap<>();
 
     @PostConstruct
     private void openConnections() {
         serverEntityService.findActiveServer().forEach(this::openConnection);
     }
 
-    private void openConnection(ServerEntity s) {
-        EventManager eventManager = context.getBean(EventManager.class, s.getId());
-        eventManager.registerEvents(context.getBean(ConsoleListener.class, s.getId()));
-        eventManager.registerEvents(context.getBean(DeathEventListener.class, s.getId()));
-        eventManager.registerEvents(context.getBean(PlayerListener.class, s.getId()));
+    public void addNewServer(ServerEntity serverEntity) throws Exception {
+        serverList.put(serverEntity.getId(), openConnection(serverEntity));
+    }
+
+    @SneakyThrows
+    private RustClientBean openConnection(ServerEntity s) {
+        EventManager eventManager = context.getBean(EventManager.class);
         RustClientBean rustClient = context.getBean(RustClientBean.class, eventManager);
-        rustClient.startConnection(s.getAddress(), s.getPort(), s.getPassword());
+        rustClient.setServer(s);
+        eventManager.registerEvents(context.getBean(ConsoleListener.class, rustClient).setRustClient(rustClient));
+        eventManager.registerEvents(context.getBean(DeathEventListener.class, rustClient).setRustClient(rustClient));
+        eventManager.registerEvents(context.getBean(PlayerListener.class, rustClient).setRustClient(rustClient));
+        rustClient.setSaltService(context.getBean(SaltService.class, s.getPasswordSalt()));
+        rustClient.startConnection(s.getAddress(), s.getPort(), rustClient.getSaltService().decrypt(s.getPassword()));
+        CompletableFuture.runAsync(rustClient::checkConnection);
+        return rustClient;
     }
 
 }

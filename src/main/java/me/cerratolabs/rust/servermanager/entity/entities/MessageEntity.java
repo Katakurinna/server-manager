@@ -25,4 +25,10 @@ public class MessageEntity {
     @Column
     private String type;
 
+    @ManyToOne
+    private WipeEntity wipe;
+
+    @ManyToOne
+    private ServerEntity server;
+
 }

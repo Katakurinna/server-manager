@@ -15,8 +15,18 @@ public class PlayerKilledByMob {
     private Integer id;
 
     @ManyToOne
-    private PlayerEntity player;
+    private PlayerSeason player;
 
     @Column
     private DeathReason reason;
+
+    @ManyToOne
+    private WipeEntity wipe;
+
+    @ManyToOne
+    private ServerEntity server;
+
+    @Column
+    private String mob;
+
 }

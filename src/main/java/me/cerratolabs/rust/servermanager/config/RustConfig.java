@@ -1,21 +1,21 @@
 package me.cerratolabs.rust.servermanager.config;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.context.annotation.PropertySources;
 
+@Data
 @Configuration
 @ConfigurationProperties(prefix = "rust")
-@Getter @Setter
-@NoArgsConstructor
-@AllArgsConstructor
+@PropertySource("classpath:application.properties")
 public class RustConfig {
-    private String address;
-    private Integer port;
-    private String password;
-    private String wipeVersion;
+    private String secretKey;
     private String steamKey;
+    private Integer serverId;
+    private Boolean sendKills = true;
+    private Boolean sendMobEvents = true;
+    private Boolean saveData = true;
+
 }

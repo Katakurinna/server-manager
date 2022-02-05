@@ -4,27 +4,22 @@ import lombok.Data;
 
 import javax.persistence.*;
 
-@Entity
-@Table
 @Data
-public class MobKilledByPlayer {
+@Table
+@Entity
+public class PlayerSeason {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
     @ManyToOne
-    private PlayerSeason player;
+    private PlayerEntity player;
 
     @Column
-    private String mob;
+    private Long startDate;
 
     @Column
-    private Long timestamp;
+    private Long endDate;
 
-    @ManyToOne
-    private WipeEntity wipe;
-
-    @ManyToOne
-    private ServerEntity server;
 }

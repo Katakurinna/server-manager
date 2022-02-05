@@ -15,10 +15,19 @@ public class DeathEventEntity {
     private Long id;
 
     @ManyToOne
-    private PlayerEntity killer;
+    private PlayerSeason killer;
 
     @ManyToOne
-    private PlayerEntity murdered;
+    private PlayerSeason murdered;
+
+    @Column
+    private boolean headshot;
+
+    @Column
+    private float distance;
+
+    @Column
+    private String weapon;
 
     @Column
     private Long timestamp;
@@ -26,10 +35,11 @@ public class DeathEventEntity {
     @Column
     private DeathReason reason;
 
-    @Column
-    private String wipeVersion;
 
-    @Column
-    private Integer server;
+    @ManyToOne
+    private WipeEntity wipe;
+
+    @ManyToOne
+    private ServerEntity server;
 
 }
