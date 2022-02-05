@@ -2,7 +2,7 @@ package me.cerratolabs.rust.servermanager.entity.services;
 
 import me.cerratolabs.rust.servermanager.entity.entities.*;
 import me.cerratolabs.rust.servermanager.entity.repository.DeathEventRepository;
-import me.cerratolabs.rustrcon.events.event.pvp.PlayerDeathByPlayerEvent;
+import me.cerratolabs.rustrcon.events.event.pvp.PlayerDeathEventsEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -25,7 +25,7 @@ public class DeathEventService {
     private PlayerSeasonService playerSeasonService;
 
     @Transactional
-    public void saveDeathEvent(PlayerDeathByPlayerEvent event, ServerEntity server) {
+    public void saveDeathEvent(PlayerDeathEventsEvent event, ServerEntity server) {
         DeathEventEntity deathEventEntity = new DeathEventEntity();
         PlayerEntity killerEntity = playerEntityService.savePlayer(event.getKiller());
         PlayerSeason killerSeason = playerSeasonService.findMostRecentlyPlayerSeason(killerEntity);
@@ -35,6 +35,9 @@ public class DeathEventService {
         deathEventEntity.setMurdered(murderedSeason);
         deathEventEntity.setTimestamp(event.getTime());
         deathEventEntity.setReason(event.getReason());
+        deathEventEntity.setHeadshot(event.isHeadshot());
+        deathEventEntity.setDistance(event.getDistance());
+        deathEventEntity.setWeapon(event.getWeapon());
         deathEventEntity.setWipe(wipe.findWipeByServer(server));
         deathEventEntity.setServer(server);
         repository.saveAndFlush(deathEventEntity);
@@ -64,4 +67,17 @@ public class DeathEventService {
         return repository.countAllByMurderedAndServer(murdered, server);
     }
 
+    public Float obtainFurthestMurder(PlayerSeason playerSeason, ServerEntity server) {
+        return repository.obtainFurthestMurder(playerSeason, server);
+    }
+
+    public Float obtainAverageHeadshot(PlayerSeason playerSeason, ServerEntity server) {
+        return repository.obtainAverageHeadshot(playerSeason, server);
+    }
+
+    public String obtainMostUsedWeapon(PlayerSeason playerSeason, ServerEntity server) {
+        List<String> strings = repository.obtainMostUsedWeapon(playerSeason, server);
+        if (strings.isEmpty()) return null;
+        return strings.get(0);
+    }
 }

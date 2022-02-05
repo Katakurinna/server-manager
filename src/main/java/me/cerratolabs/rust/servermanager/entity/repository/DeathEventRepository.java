@@ -26,4 +26,12 @@ public interface DeathEventRepository extends JpaRepository<DeathEventEntity, St
 
     Integer countAllByMurderedAndServer(PlayerSeason murdered, ServerEntity server);
 
+    @Query("SELECT MAX(distance) FROM DeathEventEntity where killer = :killer and server= :server")
+    Float obtainFurthestMurder(@Param("killer") PlayerSeason killer, @Param("server") ServerEntity server);
+
+    @Query("SELECT AVG(headshot) FROM DeathEventEntity where killer = :killer and server= :server")
+    Float obtainAverageHeadshot(@Param("killer") PlayerSeason killer, @Param("server") ServerEntity server);
+
+    @Query("SELECT weapon FROM DeathEventEntity where killer = :killer and server= :server GROUP BY weapon ORDER BY COUNT(weapon) DESC")
+    List<String> obtainMostUsedWeapon(@Param("killer") PlayerSeason killer, @Param("server") ServerEntity server);
 }

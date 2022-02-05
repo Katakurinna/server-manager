@@ -21,6 +21,15 @@ public class DeathEventEntity {
     private PlayerSeason murdered;
 
     @Column
+    private boolean headshot;
+
+    @Column
+    private float distance;
+
+    @Column
+    private String weapon;
+
+    @Column
     private Long timestamp;
 
     @Column

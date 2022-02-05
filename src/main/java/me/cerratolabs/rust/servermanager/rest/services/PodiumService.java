@@ -34,7 +34,7 @@ public class PodiumService {
     private DeathEventService deathService;
 
     public Podium getPodium(Integer serverId, Integer wipeId) {
-        Query query = em.createNativeQuery("SELECT killer_id, kills, @row_number::=@row_number+1 AS row_number FROM ( SELECT killer_id, COUNT(killer_id) AS kills FROM death_event_entity WHERE wipe_id LIKE " + wipeId + " AND server_id = " + serverId + " GROUP BY killer_id ORDER BY COUNT(killer_id) DESC LIMIT 5) AS d,(SELECT @row_number::=0) AS t");
+        Query query = em.createNativeQuery("SELECT killer_id, kills, ROW_NUMBER() OVER (ORDER BY kills DESC) row_num FROM ( SELECT killer_id, COUNT(killer_id) AS kills FROM death_event_entity WHERE wipe_id LIKE " + wipeId + " AND server_id = " + serverId + " GROUP BY killer_id ORDER BY COUNT(killer_id) DESC LIMIT 5) AS d");
         List<Object[]> list = query.getResultList();
         List<PodiumPlayer> collect = list.stream().map(this::parseToPodiumPlayer).collect(Collectors.toList());
         return new Podium(collect);

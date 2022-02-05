@@ -26,4 +26,10 @@ public class PlayerStats {
 
     private Float totalKDR;
 
+    private Float furthestMurder;
+
+    private Float averageHeadshot;
+
+    private String mostUsedWeapon;
+
 }

@@ -10,7 +10,7 @@
     </parent>
     <groupId>me.cerratolabs.rust</groupId>
     <artifactId>server-manager</artifactId>
-    <version>0.0.1</version>
+    <version>1.0.0</version>
     <name>server-manager</name>
     <description>Server manager for Rust Game</description>
     <properties>
@@ -27,17 +27,18 @@
         <dependency>
             <groupId>com.github.Katakurinna</groupId>
             <artifactId>rustrcon</artifactId>
-            <version>0.0.9</version>
+            <version>1.0.0</version>
         </dependency>
 
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-jpa</artifactId>
         </dependency>
+        <!-- https://mvnrepository.com/artifact/mysql/mysql-connector-java -->
         <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
-            <scope>runtime</scope>
+            <version>8.0.28</version>
         </dependency>
 
         <dependency>

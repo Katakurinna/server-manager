@@ -59,6 +59,10 @@ public class PlayerStatsService {
 
         stats.setTotalKDR(calculateKDR(stats.getTotalKills(), stats.getTotalDeaths()));
         stats.setAvatar(steamDataService.getAvatarFull(player.getSteamId()));
+
+        stats.setFurthestMurder(deathService.obtainFurthestMurder(playerSeason, server));
+        stats.setAverageHeadshot(deathService.obtainAverageHeadshot(playerSeason, server));
+        stats.setMostUsedWeapon(deathService.obtainMostUsedWeapon(playerSeason, server));
         return stats;
     }
 

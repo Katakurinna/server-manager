@@ -9,6 +9,7 @@ import me.cerratolabs.rustrcon.entities.MobEntity;
 import me.cerratolabs.rustrcon.events.event.pve.MobKilledByPlayerEvent;
 import me.cerratolabs.rustrcon.events.event.pve.PlayerDeathByMobEvent;
 import me.cerratolabs.rustrcon.events.event.pvp.PlayerDeathByPlayerEvent;
+import me.cerratolabs.rustrcon.events.event.pvp.PlayerDeathEventsEvent;
 import me.nurio.events.handler.EventHandler;
 import me.nurio.events.handler.EventListener;
 import org.slf4j.Logger;
@@ -41,14 +42,9 @@ public class DeathEventListener implements EventListener {
     }
 
     @EventHandler
-    public void killEvent(PlayerDeathByPlayerEvent event) {
+    public void killEvent(PlayerDeathEventsEvent event) {
         if (config.getSaveData()) {
             deathEventService.saveDeathEvent(event, rustClient.getServer());
-        }
-        String message = String.format("PvP: %s -> %s", event.getKiller().getUsername(), event.getPlayer().getUsername());
-        logger.info("Server: {}" + message, rustClient.getServer().getId());
-        if (config.getSendKills()) {
-            rustClient.sendMessage("say " + message);
         }
     }
 
@@ -57,23 +53,12 @@ public class DeathEventListener implements EventListener {
         if (config.getSaveData()) {
             mobKilledByPlayerService.save(event, rustClient.getServer());
         }
-        String message = String.format("PvE: %s -> %s", event.getPlayer().getUsername(), event.getEntity().getEntityName());
-        logger.info("Server: {}" + message, rustClient.getServer().getId());
-        if (config.getSendMobEvents()) {
-            rustClient.sendMessage("say " + message);
-        }
     }
 
     @EventHandler
     public void mobDeathEvent(PlayerDeathByMobEvent event) {
         if (config.getSaveData()) {
             playerKilledByMobService.save(event, rustClient.getServer());
-        }
-
-        String message = String.format("PvE: %s -> %s", ((MobEntity) event.getEntity()).getEntityName(), event.getPlayer().getUsername());
-        logger.info("Server: {}" + message, rustClient.getServer().getId());
-        if (config.getSendMobEvents()) {
-            rustClient.sendMessage("say " + message);
         }
     }
 
