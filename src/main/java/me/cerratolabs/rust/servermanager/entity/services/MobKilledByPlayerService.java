@@ -7,6 +7,8 @@ import me.cerratolabs.rustrcon.events.event.pve.MobKilledByPlayerEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
+
 @Service
 public class MobKilledByPlayerService {
 
@@ -28,6 +30,7 @@ public class MobKilledByPlayerService {
         entity.setPlayer(playerSeasonService.findMostRecentlyPlayerSeason(playerEntityService.savePlayer(event.getPlayer())));
         entity.setMob(event.getEntity().getEntityName());
         entity.setWipe(wipe.findWipeByServer(server));
+        entity.setTimestamp(System.currentTimeMillis());
         entity.setServer(server);
         repository.save(entity);
     }
